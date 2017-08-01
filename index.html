@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Punt-A-Box</title>
+
+    <!-- Allows for A-Frame compatibility -->
+    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <!-- A-Frame environment library -->
+    <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script> 
+    <!-- Rain
+     <script src="https://rawgit.com/takahirox/aframe-rain/master/build/aframe-rain.min.js"></script> -->
+    <!-- Animation support -->
+    <script src="https://unpkg.com/aframe-curve-component/dist/aframe-curve-component.min.js"></script>
+    <!-- Physics engine -->
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.8.6/dist/aframe-extras.js"></script>
+    <!--<script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v1.4.2/dist/aframe-physics-system.min.js"></script>-->
+
+    <!-- Adding text onto component bodies -->
+    <script src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Faframe-htmltexture-component.min.js?1501252392884"></script>
+    <script src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Faframe-draw-component.js?1501252309302"></script>
+  
+    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+  
+  
+</head>
+<body>
+
+    <a-scene  physics="">
+        <!-- This is where you place links to models -->
+        <a-assets>
+            <a-asset-item id="monkey" src="https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2Fmodel.dae?1501180119018"></a-asset-item>
+            <a-asset-item id="toucan" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Fsam.obj?1501183425945"></a-asset-item>
+            <a-asset-item id="banana" src="https://cdn.glitch.com/c9ee8980-fd28-49fb-b38d-c759bc6a5eca%2Fmodel%202.dae?1501183397482"></a-asset-item>
+            <a-asset-item id="dancingbanana" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FDancingBanana.obj?1501184182651"></a-asset-item>
+      
+          
+          <a-asset-item id="house" position="10 0 -11" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FSolaceon%20Town%20House.obj?1501247359218"></a-asset-item>
+            <a-asset-item id="wolverine" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FM-COC_iOS_HERO_James_Howlett_Wolverine_Modern.obj?1501203404181"></a-asset-item>
+            <a-asset-item id="spiderman" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FM-COC_iOS_HERO_Peter_Parker_Spider-Man_Classic.obj?1501202146941"></a-asset-item>
+            <a-asset-item id="vine" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Fshriveled%2Bvines.obj?1501200576003"></a-asset-item>
+            <a-asset-item id="tree" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Fpalmtree.obj?1501199915360"></a-asset-item>
+            <!--<a-asset-item id="tree1" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FDragonTree.obj?1501189106221"></a-asset-item>
+            <a-asset-item id="tree2" src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FSans%2Btitre%20(1).obj?1501189124767"></a-asset-item> -->
+            
+            <!-- Any text that you want displayed on objects, should be placed as HTML in this section.-->
+            <div id="goodbye"><center>1</center></div>
+      </a-assets>
+      
+<!--       <a-entity id="spectator" camera position="0 8.6 19" rotation="-20 0 0" active="false" ></a-entity> -->
+      
+        <a-entity id="player" camera="userHeight: 1.5"
+                  universal-controls
+                  kinematic-body
+                  position="-1 1 -16"
+                  rotation="-15 -185 0">
+        </a-entity>
+      
+      
+         <!-- Amazon Prime Box -->
+        <a-box dynamic-body id="model-amazon-box" position="-1 1 -14" rotation="0 0 0" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2Fyj9766e.jpg?1501176563347)"></a-box>
+
+        <!--Win Text-->
+        <a-text id="wintext" value="Congratulations!" position="8 7 20" rotation="180 0 180" text="width:50" opacity="0"></a-text>
+        <a-text id="wintext2" value="Congratulations!" position="-10 7 20" rotation="0 0 180" text="width:50" opacity="0"></a-text>
+
+        <!-- Entire environment design -->
+        <a-entity id ="environment" position="0 0.5 0" environment="preset: forest; groundColor: #593b0f; groundTexture:walkernoise; grid: none">
+
+          
+          
+          
+        <!-- Ground -->
+        <a-grid static-body position="0 -0.01 0"></a-grid>
+
+        <!-- Walls -->
+        <a-entity id="boundary-walls">
+            <a-box id="back-wall" position="-1.624 1.750 -17.61" rotation="0 0 0" scale="27.680 3.747 0.999" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FTexturesCom_Groundplants0209_2_M.jpg?1501175457802)" static-body></a-box>
+            <a-box id="right-wall" position="11.796 1.320 -2.904" rotation="0 0 0" scale="1 3.75 29" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FTexturesCom_Groundplants0209_2_M.jpg?1501175457802)" static-body></a-box>
+            <a-box id="left-wall" position="-15 0.5 -2.943" rotation="0 0 0" scale="1 3.75 30" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FTexturesCom_Groundplants0209_2_M.jpg?1501175457802)" static-body></a-box>
+        </a-entity>
+
+        <a-entity id="grid"></a-entity>
+
+        <!-- Collada/.DAE file examples -->      
+          
+          <a-entity dynamic-body position = "-8 0 13" rotation="0 155 0" scale="1 1 1" collada-model="#monkey"></a-entity>
+          <a-entity dynamic-body id="model-banana1" position="5 0 3.5" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana2" position="-4 0 10" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana3" position="0 0 -6" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana4" position="-5 0 1" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana5" position="-10 0 5.5" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana6" position="-12 0 -8" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana7" position="-12 0 -10" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana8" position="-12 0 -11" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana9" position="-12 0 -12" collada-model="#banana"></a-entity>
+          <a-entity dynamic-body id="model-banana10" position="-12 0 -13" collada-model="#banana"></a-entity>
+
+
+          
+          
+          
+        <!-- .OBJ examples -->
+        <a-entity dynamic-body id="model-toucan" position="-15.0 2.3 0.444" rotation="0 90 0" scale="1 1 1" obj-model="obj: #toucan" material="src: url(https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FTex_0013.png?1501183563304)"></a-entity>
+
+        <a-entity dynamic-body id="model-dancingbanana" position="-15 2.75 -2" rotation="0 45 0" obj-model="obj: #dancingbanana" material="src: url(https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FHandle1Tex.png?1501184182210)">
+         
+          </a-entity>
+
+        <!--<a-entity static-body id="model-vine" position="-6 1 -2" rotation="0 0 0" scale="0.020 0.020 0.020" obj-model="obj: #vine" material="src: url(https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Fshriveled%2Bvines.mtl?1501200577998)"></a-entity>
+
+        <!--<a-entity static-body id="model-tree" position="-12 0.5 -5" rotation="0 0 0" scale="0.020 0.020 0.010" obj-model="obj: #tree" material="src: url(https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Fpalmtree.mtl?1501199932481)"></a-entity>
+-->
+        <a-entity dynamic-body id="model-spiderman" position="4 0 6" rotation="0 0 0" obj-model="obj: #spiderman" material="src: url(https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FM-COC_iOS_HERO_Peter_Parker_Spider-Man_Classic_Body_D.png?1501203162261)"></a-entity>  
+    
+        <a-entity dynamic-body id="model-wolverine" position="-2 0.092 2" rotation="0 200 0" scale="1 1 1" obj-model="obj: #wolverine" material="src: url(https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FM-COC_iOS_HERO_James_Howlett_Wolverine_Modern_Body_D.png?1501203401433)"></a-entity>
+          
+          <a-entity static-body id="model-house" position="1 0 15" rotation="0 180 0" scale="0.05 0.05 0.05" obj-model="obj: #house" material="src: url(https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2Ft4_h01_a.png?1501247406881)"></a-entity>
+  
+        <!--  
+        <a-entity position = "-6 0.5 -7" obj-model="obj: #tree1"></a-entity>
+        <a-entity position = "2 0.5 -4" obj-model="obj: #tree2"></a-entity>
+        -->
+    
+        
+       
+        <!-- Sphere testing -->
+        <a-entity dynamic-body id="model-syfball-1" geometry="primitive: sphere" position="10 1.098 -5" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)" light="type: point; intensity: .5" >
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+        <a-entity dynamic-body id="model-syfball-2" geometry="primitive: sphere" position="8 1.393 -13.35" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)">
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+          <a-entity dynamic-body id="model-syfball-3" geometry="primitive: sphere" position="-2 1.393 -4.35" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)">
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+          <a-entity  geometry="primitive: sphere" position="-14.984 3.501 -15.149" rotation="0 261.968 0" scale="1 1 1" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)" >
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+          
+          <!-- Box that displays text - remove later, here for reference -->
+          <!--<a-entity geometry="primitive: box" position="3 3 3" draw="width: 64; height: 64;" 
+      htmltexture="asset: #goodbye"></a-entity>-->
+          <a-entity  geometry="primitive: sphere" position="11.623 4.214 -15.149" rotation="0 261.968 0" scale="1 1 1" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)">
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+          <a-entity  geometry="primitive: sphere" position="-15.058 3.501 11.436" rotation="0 261.968 0" scale="1 1 1" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)" >
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+          <a-entity  dynamic-body geometry="primitive: sphere" position="-12.722 1.090 0.057" rotation="0 286.057 0" scale="1 1 1" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)" light="type: point; intensity: .5">
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+           <a-entity  geometry="primitive: sphere" position="12.022 4.447 11.193" rotation="0 269.657 0" scale="1 1 1" radius="2" color="#EF2D5E" material="src: url(https://cdn.glitch.com/2f7c84ac-da94-4ba1-af4c-f9fd6789b3e1%2FSync.png?1501181636495)" >
+          <a-animation attribute="rotation"
+                 dur="10000"
+                 fill="forwards"
+                 to="0 360 0"
+                 repeat="indefinite">
+          </a-animation>
+        </a-entity>
+      </a-entity>
+    </a-scene>
+
+
+    <audio id="music" controls autoplay>
+        <source src="https://cdn.glitch.com/7504e9e6-2c9a-4021-b774-3595514f4a7f%2FSan%20Holo-Donkey%20Kong%20(EXTENDED).mp3?1501202696085" type="audio/mpeg">
+    </audio>
+
+  <script>
+var GRID_BLOCK_SIZE = 3;
+
+var isDataReady = false;
+var isRenderTargetReady = false;
+var data, old_data;
+var saved_amazon_box; 
+
+var firebaseInstance = firebase.initializeApp({
+    apiKey: 'AIzaSyCSSdFwQWJMJToT83D93KHRBhghIZR3nE0',
+    authDomain: 'castinganet-c5700.firebaseapp.com',
+    databaseURL: 'https://castinganet-c5700.firebaseio.com',
+    projectId: 'castinganet-c5700',
+    storageBucket: 'castinganet-c5700.appspot.com',
+    messagingSenderId: '195139171996'
+});
+
+var rootRef = firebaseInstance.database().ref('/');
+
+var gridRef = rootRef.child('grid');
+
+var cameraRef = rootRef.child('camera');
+var modelRef = rootRef.child('model');
+    
+var alexabox = document.querySelector('#model-amazon-box');
+var alexahouse = document.querySelector('#model-house');
+var wintext = document.querySelector('#wintext');
+    
+    alexahouse.addEventListener('collide', function (e) {
+      console.log('house has collided with body #' + e.detail.body.id);
+      console.log("colide with" + e.detail.body.id);
+      if (e.detail.body.id === 1) {
+        console.log("win");
+        wintext.setAttribute('opacity','1');
+      }
+      
+    });
+    
+    var playerEl = document.querySelector('[camera]');
+playerEl.addEventListener('collide', function (e) {
+  
+  console.log('Player has collided with body #' + e.detail.body.id);
+
+  e.detail.target.el;  // Original entity (playerEl).
+  e.detail.body.el;    // Other entity, which playerEl touched.
+  e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
+  e.detail.contact.ni; // Normal (direction) of the collision (CANNON.Vec3).
+}); 
+
+
+function handleNormalizeData(data) {
+    let obj = {};
+
+    data.forEach((row, rowIndex) => {
+
+        var rowObj = {};
+
+        row.forEach((rowData, rowIndex) => {
+            // console.log(rowData)
+
+            rowObj[rowIndex] = rowData;
+
+        })
+
+        obj[rowIndex] = rowObj;
+
+    })
+
+    return obj;
+}
+
+function loadData() {
+    gridRef.once('value', snapshot => {
+
+        data = handleNormalizeData(snapshot.val());
+
+        //console.log('data pulled!!:', grid);
+
+        isDataReady = true;
+        console.info("data is ready", data);
+        checkReady();
+    });
+}
+loadData();
+
+gridRef.on('child_changed', snapshot => {
+    old_data = data;
+    loadData();
+});
+
+document.querySelector('a-scene').addEventListener('render-target-loaded', function () {
+    isRenderTargetReady = true;
+    console.info("render target is ready");
+  
+  saved_amazon_box = jQuery('#model-amazon-box').clone().removeProp('id').removeAttr('id');
+  
+    checkReady();
+});
+
+function checkReady() {
+    if (isDataReady && isRenderTargetReady) {
+        buildMap();
+    }
+}
+
+function makeElement(type, dataColor) {
+    console.log("makeElement", type);
+
+    switch(type)
+    {
+        case 'box':
+            var box = document.createElement('a-box');
+
+            var colors = ["#FF3333", "#33FF33", "#3333FF", "#666666", "#FFFFFF"];
+            var color ;//= colors[Math.floor(Math.random()*colors.length)];
+            
+            color = (dataColor == undefined) ? colors[0] : dataColor;
+            
+            box.setAttribute('color', color);
+            box.setAttribute('width', GRID_BLOCK_SIZE);
+            box.setAttribute('height', GRID_BLOCK_SIZE);
+            box.setAttribute('depth', GRID_BLOCK_SIZE);
+            box.setAttribute('static-body', '');
+            //box.setAttribute('dynamic-body', '');
+            return box;
+
+        case 'floor':
+//             var box = document.createElement('a-box');
+
+//             var color = "#000000";
+
+//             box.setAttribute('color', color);
+//             box.setAttribute('width', GRID_BLOCK_SIZE);
+//             box.setAttribute('height', 0.1);
+//             box.setAttribute('depth', GRID_BLOCK_SIZE);
+//             box.setAttribute('static-body', '');
+            var box = document.createElement('a-plane');
+        
+            var color = "#000000";
+            box.setAttribute('color', color);
+            box.setAttribute('rotation', "-90 0 0");
+            box.setAttribute('width', GRID_BLOCK_SIZE);
+            box.setAttribute('height', GRID_BLOCK_SIZE);
+            //box.setAttribute('static-body', '');
+            return box;
+
+        case 'amazon-prime-box':
+            var box = jQuery('#model-amazon-box').clone().removeProp('id').removeAttr('id').get(0);
+            box.setAttribute('width', GRID_BLOCK_SIZE / 2);
+            box.setAttribute('height', GRID_BLOCK_SIZE / 2);
+            box.setAttribute('depth', GRID_BLOCK_SIZE / 2);
+            return box;
+
+        case 'syf-ball':
+            var box = jQuery('#model-syfball-1').clone().removeProp('id').removeAttr('id').get(0);
+            box.setAttribute('scale', '0.5 0.5 0.5');
+            //box.setAttribute('radius', GRID_BLOCK_SIZE / 4);
+            //box.setAttribute('height', GRID_BLOCK_SIZE / 4);
+            return box;
+    }
+}
+
+function makeRandomModel() {
+    return 'box';
+    //var a = ["box", "amazon-prime-box", "syf-ball"];
+
+    var i = Math.floor(a.length * Math.random());
+
+    return a[i];
+}
+
+function buildMap() {
+    //console.log("build map");
+    var gridElement = document.querySelector('#grid');
+
+    //jQuery(gridElement).empty();
+
+    var rowCount = 0;
+    for (var i in data) {
+        rowCount++;
+    }
+
+    var POSITION_START = 0 - Math.floor(rowCount * GRID_BLOCK_SIZE / 2);
+
+    for (var rowIndex in data) {
+        var rowData = data[rowIndex];
+        for (var colIndex in rowData) {
+
+            var cellData = rowData[colIndex];
+            
+            var model;
+
+            if (typeof cellData.model == "undefined") {
+                cellData.model = makeRandomModel();
+            }
+          
+          
+            if (cellData.selected) {
+                model = makeElement(cellData.model, cellData.color);
+            } else {
+                cellData.model = 'floor';
+                model = makeElement('floor');
+            }
+           
+            
+            if (old_data != undefined) {
+                try {
+                    var oldCellData = old_data[rowIndex][colIndex];
+                    
+                    if(cellData.selected == oldCellData.selected && cellData.model == oldCellData.model) {
+                        continue;
+                    }
+                } catch (e) {}
+            }
+            
+            jQuery("#model-position-"+rowIndex + '-' + colIndex).remove();
+
+            var modelY = 0;
+
+            switch(cellData.model)
+            {
+                case 'syf-ball':
+                    modelY = 0.5;
+                    break;
+
+                case 'floor':
+                    modelY = 0;
+                    break;
+
+                default:
+                    try {
+                        modelY = model.getAttribute('height') / 2;
+                    } catch(e) {}
+                    break;
+            }
+            
+            modelY += 0.1;
+          
+            var modelPosition = String(Number(POSITION_START) + (Number(colIndex) * GRID_BLOCK_SIZE)) + ' ' + String(modelY) + ' ' + String(Number(POSITION_START) + (Number(rowIndex) * GRID_BLOCK_SIZE));
+            //console.info("position", modelPosition);
+            model.setAttribute('position', modelPosition);
+            model.setAttribute('id', "model-position-"+rowIndex + '-' + colIndex);
+
+            if (cellData.model != 'floor') {
+              gridElement.appendChild(model);
+            }
+        }
+    }
+
+    //jQuery('#player').get(0).setAttribute('position', '0 0.6 ' + String(Number(POSITION_START) * -1));
+};
+
+function getPageSyncMode() {
+    if (window.location.hash == "#master") {
+      return "master";
+    } else if (window.location.hash == "#slave") {
+      return "slave";
+    } else {
+      return null;
+    }
+}
+      
+function amazonBoxChangeHandler(evt) {
+    
+    //console.log("model change", evt.detail);
+    
+    if (evt.detail.name == 'position' || evt.detail.name == 'rotation') {
+        // send shit - evt.detail.newData
+      console.log("model change", evt.detail);
+      
+      if (evt.detail.name == 'position' && evt.detail.newData.y < 0) {
+        console.warn("box fell off the grid");
+        jQuery('#model-amazon-box').remove();
+        
+        setTimeout(function(){
+          var foo = jQuery(saved_amazon_box).clone().prop('id', 'model-amazon-box').attr('id', 'model-amazon-box');//.prop('position', {'y': 3});
+
+          jQuery(foo).appendTo(jQuery('a-scene'));
+
+          console.info(foo);
+          foo.get(0).setAttribute('position', {'y': 3});
+          foo.get(0).addEventListener('componentchanged', amazonBoxChangeHandler);
+          // console.info(foo.get(0).getAttribute('position'));
+
+          //window.location.reload();
+          }, 1000);
+      }
+      
+      try {
+        evt.detail.newData.name = evt.detail.name;
+      } catch(e) {}
+      try {
+        evt.detail.newData.target = evt.detail.target.id;
+      } catch(e) {}
+      
+      modelRef.set(evt.detail.newData);
+    }
+  }
+
+var pageSyncMode = getPageSyncMode();
+    
+console.log("pageSyncMode", pageSyncMode);
+
+if (pageSyncMode == "master") {
+  document.querySelector('[camera]').addEventListener('componentchanged', function (evt) {
+    //console.log("camera change", evt.detail.name, evt.detail.newData, evt);
+
+    if (evt.detail.name == 'position' || evt.detail.name == 'rotation') {
+        // send shit - evt.detail.newData
+      //evt.detail.target = evt.detail.target.id;
+      //console.log("camera change", evt.detail);
+      
+      try {
+        evt.detail.newData.name = evt.detail.name;
+      } catch(e) {}
+      try {
+        evt.detail.newData.target = evt.detail.target.id;
+      } catch(e) {}
+      
+      //console.log(evt.detail.newData);
+      
+      cameraRef.set(evt.detail.newData);
+    }
+  });
+
+  //document.querySelector("[id|='model']").addEventListener('componentchanged', function (evt) {
+  document.querySelector("[id|='model-amazon-box']").addEventListener('componentchanged', amazonBoxChangeHandler);
+} else if(pageSyncMode == "slave") {
+  
+//   setTimeout(function(){
+//   var secondCameraEl = document.querySelector('#spectator');
+// secondCameraEl.setAttribute('camera', 'active', true);
+//     }, 1000);
+  
+  // here
+  //jQuery('#model-amazon-box').remove();
+  
+  cameraRef.on('child_changed', _snapshot => {
+      // update camera
+    
+      cameraRef.once('value', snapshot => {
+        data = snapshot.val();
+        //console.log("camera changed", data);
+        
+         try {
+           if (data.name == 'position' || data.name == 'rotation') {
+             //console.log("camera update", data);
+             document.getElementById(data.target).setAttribute(data.name, {'x': data.x, 'y': data.y, 'z': data.z});
+           }
+         } catch(e) {console.error(e);}
+    });
+  });
+  
+  modelRef.on('child_changed', _snapshot => {
+      // update camera
+    
+      modelRef.once('value', snapshot => {
+        data = snapshot.val();
+        console.log("box changed", data);
+        
+         try {
+           if (data.name == 'position' || data.name == 'rotation') {
+             document.getElementById(data.target).setAttribute(data.name, {'x': data.x, 'y': data.y, 'z': data.z});
+           }
+         } catch(e) {console.error(e);}
+    });
+  });
+}
+    
+    
+
+</script>
+  
+  
+    
+</body>
+</html>
